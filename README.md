@@ -5,7 +5,7 @@ He desarrollado este proyecto utilizando **Laravel 11** para el backend y **Angu
 
 ---
 
-## 🚀 Características Senior (Los "Puntos Extra")
+## 🚀 Características Adicionales
 Me gusta entregar código listo para producción, así que decidí ir un poco más allá de los requisitos originales e implementé estas mejoras adicionales:
 
 *   **DevOps y Docker:** He creado un `docker-compose.yml` en la raíz para que puedas levantar la base de datos PostgreSQL 15 y pgAdmin con un solo comando. ¡Cero instalaciones manuales!
