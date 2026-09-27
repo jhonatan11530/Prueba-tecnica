@@ -72,3 +72,7 @@ Si no usas Docker, asegúrate de tener tu PostgreSQL local corriendo en el puert
 
 ## 📝 Colección de Postman
 Te he dejado un archivo llamado `Jhonatan_fernandez_API.postman_collection.json` en la raíz del proyecto. Lo configuré con scripts automáticos para que, cuando hagas Login, guarde el Token en las variables de entorno y lo use automáticamente en las demás rutas sin que tengas que copiar y pegar nada.
+
+## Links de video de presentacion aplicacion - codigo
+
+https://drive.google.com/drive/folders/1_eaqmbkoR7UpTCGChw7sdEfON0PrEQ-b?usp=sharing
