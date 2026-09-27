@@ -1,0 +1,42 @@
+<div class="container mt-5">
+  <div class="row justify-content-center">
+    <div class="col-md-5">
+      <div class="card shadow">
+        <div class="card-header bg-primary text-white text-center py-3">
+          <h4 class="mb-0">Iniciar Sesión</h4>
+        </div>
+        <div class="card-body p-4">
+          
+          <div *ngIf="errorMsg" class="alert alert-danger">
+            {{ errorMsg }}
+          </div>
+
+          <form (ngSubmit)="onSubmit()" #loginForm="ngForm">
+            <div class="mb-3">
+              <label for="correo" class="form-label">Correo Electrónico</label>
+              <input type="email" class="form-control" id="correo" name="correo" 
+                     [(ngModel)]="credentials.correo" required>
+            </div>
+            
+            <div class="mb-3">
+              <label for="password" class="form-label">Contraseña</label>
+              <input type="password" class="form-control" id="password" name="password" 
+                     [(ngModel)]="credentials.password" required>
+            </div>
+            
+            <div class="d-grid mt-4">
+              <button type="submit" class="btn btn-primary" [disabled]="!loginForm.valid || loading">
+                <span *ngIf="loading" class="spinner-border spinner-border-sm me-2"></span>
+                Ingresar
+              </button>
+            </div>
+          </form>
+
+          <div class="text-center mt-3">
+            <p class="mb-0">¿No tienes cuenta? <a routerLink="/register">Regístrate aquí</a></p>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>

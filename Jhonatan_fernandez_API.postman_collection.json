@@ -1,0 +1,124 @@
+{
+    "info": {
+        "name": "Prueba Tecnica Marlon Torino",
+        "schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json"
+    },
+    "variable": [
+        { "key": "base_url", "value": "http://localhost:8000/api", "type": "string" },
+        { "key": "token", "value": "", "type": "string" },
+        { "key": "refresh_token", "value": "", "type": "string" }
+    ],
+    "item": [
+        {
+            "name": "Autenticacion",
+            "item": [
+                {
+                    "name": "1. Registro",
+                    "request": {
+                        "method": "POST",
+                        "header": [ { "key": "Content-Type", "value": "application/json" } ],
+                        "url": { "raw": "{{base_url}}/auth/register", "host": [ "{{base_url}}" ], "path": [ "auth", "register" ] },
+                        "body": { "mode": "raw", "raw": "{\"nombre\":\"Test User\",\"correo\":\"testuser@ejemplo.com\",\"password\":\"Test1234\",\"password_confirmation\":\"Test1234\"}" }
+                    }
+                },
+                {
+                    "name": "2. Login",
+                    "event": [
+                        {
+                            "listen": "test",
+                            "script": {
+                                "exec": [
+                                    "var jsonData = pm.response.json();",
+                                    "if(jsonData.success) {",
+                                    "    pm.collectionVariables.set(\"token\", jsonData.data.access_token);",
+                                    "    pm.collectionVariables.set(\"refresh_token\", jsonData.data.refresh_token);",
+                                    "}"
+                                ],
+                                "type": "text/javascript"
+                            }
+                        }
+                    ],
+                    "request": {
+                        "method": "POST",
+                        "header": [ { "key": "Content-Type", "value": "application/json" } ],
+                        "url": { "raw": "{{base_url}}/auth/login", "host": [ "{{base_url}}" ], "path": [ "auth", "login" ] },
+                        "body": { "mode": "raw", "raw": "{\"correo\":\"marlon@ejemplo.com\",\"password\":\"Marlon123\"}" }
+                    }
+                },
+                {
+                    "name": "3. Refresh Token",
+                    "event": [
+                        {
+                            "listen": "test",
+                            "script": {
+                                "exec": [
+                                    "var jsonData = pm.response.json();",
+                                    "if(jsonData.success) {",
+                                    "    pm.collectionVariables.set(\"token\", jsonData.data.access_token);",
+                                    "    pm.collectionVariables.set(\"refresh_token\", jsonData.data.refresh_token);",
+                                    "}"
+                                ],
+                                "type": "text/javascript"
+                            }
+                        }
+                    ],
+                    "request": {
+                        "method": "POST",
+                        "header": [ { "key": "Content-Type", "value": "application/json" } ],
+                        "url": { "raw": "{{base_url}}/auth/refresh", "host": [ "{{base_url}}" ], "path": [ "auth", "refresh" ] },
+                        "body": { "mode": "raw", "raw": "{\"refresh_token\":\"{{refresh_token}}\"}" }
+                    }
+                },
+                {
+                    "name": "4. Logout",
+                    "request": {
+                        "method": "POST",
+                        "header": [ { "key": "Authorization", "value": "Bearer {{token}}" } ],
+                        "url": { "raw": "{{base_url}}/auth/logout", "host": [ "{{base_url}}" ], "path": [ "auth", "logout" ] }
+                    }
+                }
+            ]
+        },
+        {
+            "name": "Negocio",
+            "item": [
+                {
+                    "name": "5. Paises",
+                    "request": {
+                        "method": "GET",
+                        "header": [ { "key": "Authorization", "value": "Bearer {{token}}" } ],
+                        "url": { "raw": "{{base_url}}/paises", "host": [ "{{base_url}}" ], "path": [ "paises" ] }
+                    }
+                },
+                {
+                    "name": "6. Ciudades",
+                    "request": {
+                        "method": "GET",
+                        "header": [ { "key": "Authorization", "value": "Bearer {{token}}" } ],
+                        "url": { "raw": "{{base_url}}/paises/1/ciudades", "host": [ "{{base_url}}" ], "path": [ "paises", "1", "ciudades" ] }
+                    }
+                },
+                {
+                    "name": "7. Hacer Consulta",
+                    "request": {
+                        "method": "POST",
+                        "header": [
+                            { "key": "Authorization", "value": "Bearer {{token}}" },
+                            { "key": "Content-Type", "value": "application/json" }
+                        ],
+                        "url": { "raw": "{{base_url}}/consultas", "host": [ "{{base_url}}" ], "path": [ "consultas" ] },
+                        "body": { "mode": "raw", "raw": "{\"ciudad_id\": 1, \"presupuesto\": 5000000}" }
+                    }
+                },
+                {
+                    "name": "8. Historial",
+                    "request": {
+                        "method": "GET",
+                        "header": [ { "key": "Authorization", "value": "Bearer {{token}}" } ],
+                        "url": { "raw": "{{base_url}}/consultas/historial", "host": [ "{{base_url}}" ], "path": [ "consultas", "historial" ] }
+                    }
+                }
+            ]
+        }
+    ]
+}

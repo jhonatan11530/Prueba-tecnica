@@ -1,0 +1,62 @@
+<div class="container mt-5 mb-5">
+  <div class="row justify-content-center">
+    <div class="col-md-6">
+      <div class="card shadow">
+        <div class="card-header bg-success text-white text-center py-3">
+          <h4 class="mb-0">Crear Cuenta Nueva</h4>
+        </div>
+        <div class="card-body p-4">
+          
+          <div *ngIf="successMsg" class="alert alert-success">
+            {{ successMsg }}
+          </div>
+
+          <div *ngIf="errorMsg" class="alert alert-danger">
+            {{ errorMsg }}
+          </div>
+
+          <form (ngSubmit)="onSubmit()" #registerForm="ngForm" *ngIf="!successMsg">
+            <div class="mb-3">
+              <label for="nombre" class="form-label">Nombre Completo</label>
+              <input type="text" class="form-control" [ngClass]="{'is-invalid': getFieldError('nombre')}" 
+                     id="nombre" name="nombre" [(ngModel)]="user.nombre" required>
+              <div class="invalid-feedback">{{ getFieldError('nombre') }}</div>
+            </div>
+
+            <div class="mb-3">
+              <label for="correo" class="form-label">Correo Electrónico</label>
+              <input type="email" class="form-control" [ngClass]="{'is-invalid': getFieldError('correo')}" 
+                     id="correo" name="correo" [(ngModel)]="user.correo" required>
+              <div class="invalid-feedback">{{ getFieldError('correo') }}</div>
+            </div>
+            
+            <div class="mb-3">
+              <label for="password" class="form-label">Contraseña</label>
+              <input type="password" class="form-control" [ngClass]="{'is-invalid': getFieldError('password')}" 
+                     id="password" name="password" [(ngModel)]="user.password" required>
+              <div class="invalid-feedback">{{ getFieldError('password') }}</div>
+              <small class="form-text text-muted">Debe tener al menos 8 caracteres, 1 mayúscula, 1 minúscula y 1 número.</small>
+            </div>
+
+            <div class="mb-3">
+              <label for="password_confirmation" class="form-label">Confirmar Contraseña</label>
+              <input type="password" class="form-control" id="password_confirmation" name="password_confirmation" 
+                     [(ngModel)]="user.password_confirmation" required>
+            </div>
+            
+            <div class="d-grid mt-4">
+              <button type="submit" class="btn btn-success" [disabled]="!registerForm.valid || loading">
+                <span *ngIf="loading" class="spinner-border spinner-border-sm me-2"></span>
+                Registrarme
+              </button>
+            </div>
+          </form>
+
+          <div class="text-center mt-3">
+            <p class="mb-0">¿Ya tienes una cuenta? <a routerLink="/login">Inicia sesión</a></p>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>

@@ -1,0 +1,102 @@
+<nav class="navbar navbar-expand-lg navbar-dark bg-dark">
+  <div class="container">
+    <a class="navbar-brand" href="#">Travel Planner</a>
+    <div class="d-flex">
+      <a routerLink="/historial" class="btn btn-outline-light me-2">Ver Historial</a>
+      <button (click)="logout()" class="btn btn-danger">Cerrar Sesión</button>
+    </div>
+  </div>
+</nav>
+
+<div class="container mt-5">
+  <div class="row">
+    <!-- Formulario de Consulta -->
+    <div class="col-md-5">
+      <div class="card shadow-sm mb-4">
+        <div class="card-header bg-primary text-white">
+          <h5 class="mb-0">Consultar Destino</h5>
+        </div>
+        <div class="card-body">
+          
+          <div *ngIf="errorMsg" class="alert alert-danger">{{ errorMsg }}</div>
+
+          <form (ngSubmit)="onSubmit()" #consultaForm="ngForm">
+            <div class="mb-3">
+              <label class="form-label">País</label>
+              <select class="form-select" name="pais" [(ngModel)]="selectedPais" (change)="onPaisChange()" required>
+                <option [ngValue]="null" disabled>Selecciona un país...</option>
+                <option *ngFor="let p of paises" [ngValue]="p.id">{{ p.nombre }}</option>
+              </select>
+              <div *ngIf="loadingPaises" class="form-text text-muted">Cargando países...</div>
+            </div>
+
+            <div class="mb-3">
+              <label class="form-label">Ciudad</label>
+              <select class="form-select" name="ciudad" [(ngModel)]="selectedCiudad" [disabled]="!selectedPais || ciudades.length === 0" required>
+                <option [ngValue]="null" disabled>Selecciona una ciudad...</option>
+                <option *ngFor="let c of ciudades" [ngValue]="c.id">{{ c.nombre }}</option>
+              </select>
+              <div *ngIf="loadingCiudades" class="form-text text-muted">Cargando ciudades...</div>
+            </div>
+
+            <div class="mb-3">
+              <label class="form-label">Presupuesto (COP)</label>
+              <input type="number" class="form-control" [ngClass]="{'is-invalid': getFieldError('presupuesto')}" 
+                     name="presupuesto" [(ngModel)]="presupuesto" placeholder="Ej: 5000000" required>
+              <div class="invalid-feedback">{{ getFieldError('presupuesto') }}</div>
+            </div>
+
+            <button type="submit" class="btn btn-primary w-100" [disabled]="!consultaForm.valid || loadingConsulta">
+              <span *ngIf="loadingConsulta" class="spinner-border spinner-border-sm me-2"></span>
+              Calcular Viaje
+            </button>
+          </form>
+        </div>
+      </div>
+    </div>
+
+    <!-- Resultados de la Consulta -->
+    <div class="col-md-7">
+      <div class="card shadow-sm" *ngIf="resultado">
+        <div class="card-header bg-success text-white">
+          <h5 class="mb-0">Resultados para {{ resultado.ciudad }}, {{ resultado.pais }}</h5>
+        </div>
+        <div class="card-body">
+          <div class="row">
+            
+            <div class="col-sm-6 mb-3">
+              <div class="card border-info h-100">
+                <div class="card-body text-center">
+                  <h6 class="card-title text-info">Clima Actual</h6>
+                  <h2 class="display-4">{{ resultado.clima_celsius !== null ? resultado.clima_celsius + '°C' : '--' }}</h2>
+                  <p class="text-danger mb-0" *ngIf="resultado.clima_aviso">{{ resultado.clima_aviso }}</p>
+                </div>
+              </div>
+            </div>
+
+            <div class="col-sm-6 mb-3">
+              <div class="card border-warning h-100">
+                <div class="card-body text-center">
+                  <h6 class="card-title text-warning">Tasa de Cambio</h6>
+                  <h4>1 COP = {{ resultado.tasa_aplicada !== null ? resultado.tasa_aplicada + ' ' + resultado.moneda_simbolo : '--' }}</h4>
+                  <p class="text-danger mb-0" *ngIf="resultado.conversion_aviso">{{ resultado.conversion_aviso }}</p>
+                </div>
+              </div>
+            </div>
+            
+          </div>
+          
+          <div class="alert alert-light border text-center mt-3" *ngIf="resultado.valor_convertido !== null">
+            <h5>Tu presupuesto de <strong>{{ resultado.presupuesto_cop | currency:'COP' }}</strong> equivale a:</h5>
+            <h1 class="text-success">{{ resultado.valor_convertido }} {{ resultado.moneda_nombre }} ({{ resultado.moneda_simbolo }})</h1>
+          </div>
+
+        </div>
+      </div>
+
+      <div class="text-center text-muted mt-5" *ngIf="!resultado && !loadingConsulta">
+        <h5>Selecciona un destino y un presupuesto para ver el clima y la conversión de moneda.</h5>
+      </div>
+    </div>
+  </div>
+</div>
